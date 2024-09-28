@@ -1,0 +1,69 @@
+{{- if .Values.zcashd.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.zcashd.name }}
+spec:
+  replicas: {{ .Values.zcashd.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Values.zcashd.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-{{ .Values.zcashd.name }}
+    spec:
+      containers:
+      - name: zcashd
+        image: {{ .Values.zcashd.image.repository }}:{{ .Values.zcashd.image.tag }}
+        imagePullPolicy: {{ .Values.zcashd.image.pullPolicy }}
+        command: ["zcashd"]
+        args:
+          - -conf=/srv/zcashd/conf/zcashd.conf
+          - -printtoconsole
+          {{- range $index, $value := .Values.zcashd.nodes }}
+          - -addnode={{ $value }}
+          {{- end }}
+          {{- if .Values.zcashd.reindex }}
+          - -reindex
+          {{- end }}
+          {{- with .Values.zcashd.additionalArgs }}
+            {{- toYaml . | nindent 10 }}
+          {{- end}}
+        ports:
+        - containerPort: 8232
+          name: zcashd-rpc
+        - containerPort: 8233
+          name: zcashd-p2p
+        volumeMounts:
+        - name: {{ .Values.zcashd.name }}-data
+          mountPath: /srv/zcashd/.zcash
+        - name: zcash-config
+          mountPath: /srv/zcashd/conf
+        resources:
+          requests:
+            cpu: {{ .Values.zebra.requests.cpu }}
+            memory: {{ .Values.zebra.requests.memory }}
+          {{- if .Values.zebra.limits }}
+          limits:
+            {{- if .Values.zebra.limits.memory }}
+            memory: {{ .Values.zebra.limits.memory }}
+            {{- end }}
+          {{- end }}
+      volumes:
+      - name: zcash-config
+        configMap:
+          name: {{ .Release.Name }}-{{ .Values.zcashd.name }}
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Values.zcashd.name }}-data
+    spec:
+      accessModes:
+        - "ReadWriteMany"
+      resources:
+        requests:
+          storage: {{ .Values.zcashd.volumes.data.size }}
+      {{- if .Values.zcashd.volumes.data.storageClass }}
+      storageClassName: {{ .Values.zcashd.volumes.data.storageClass }}
+      {{- end }}
+{{- end }}

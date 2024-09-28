@@ -1,0 +1,6 @@
+repository:
+  name: zcash-stack
+  displayName: Zcash Stack Helm Chart
+  description: A Helm chart to deploy the Zcash ecosystem on Kubernetes.
+  type: helm
+  url: https://github.com/Electric-Coin-Company/zcash-stack

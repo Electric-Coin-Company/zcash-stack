@@ -1,0 +1,69 @@
+{{- if .Values.lightwalletd.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.lightwalletd.name }}
+spec:
+  replicas: {{ .Values.lightwalletd.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Values.lightwalletd.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-{{ .Values.lightwalletd.name }}
+    spec:
+      containers:
+      - name: lightwalletd
+        image: {{ .Values.lightwalletd.image.repository }}:{{ .Values.lightwalletd.image.tag }}
+        imagePullPolicy: {{ .Values.lightwalletd.image.pullPolicy }}
+        command: ["lightwalletd"]
+        args:
+          - --grpc-bind-addr
+          - 0.0.0.0:9067
+          - --no-tls-very-insecure
+          - --zcash-conf-path 
+          - /srv/lightwalletd/conf/zcash.conf
+          - --data-dir
+          - /srv/lightwalletd/db_volume
+          - --log-file
+          - /dev/stdout
+          {{- with .Values.lightwalletd.additionalArgs }}
+            {{- toYaml . | nindent 10 }}
+          {{- end}}
+        ports:
+        - containerPort: 9067
+          name: grpc
+        volumeMounts:
+        - name: {{ .Values.lightwalletd.name }}-data
+          mountPath: /srv/lightwalletd/db_volume
+        - name: config
+          mountPath: /srv/lightwalletd/conf
+        resources:
+          requests:
+            cpu: {{ .Values.zebra.requests.cpu }}
+            memory: {{ .Values.zebra.requests.memory }}
+          {{- if .Values.zebra.limits }}
+          limits:
+            {{- if .Values.zebra.limits.memory }}
+            memory: {{ .Values.zebra.limits.memory }}
+            {{- end }}
+          {{- end }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ .Release.Name }}-{{ .Values.lightwalletd.name }}
+
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Values.lightwalletd.name }}-data
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.lightwalletd.volumes.data.size }}
+      {{- if .Values.zcashd.volumes.data.storageClass }}
+      storageClassName: {{ .Values.zcashd.volumes.data.storageClass }}
+      {{- end }}
+{{- end }}
