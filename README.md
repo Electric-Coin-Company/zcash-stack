@@ -11,7 +11,7 @@ By default, this chart uses **Caddy** as a web frontend for `lightwalletd`, maki
 Although the default configuration is ready to deploy and run, this Helm chart is highly customizable. You can easily adapt it to fit your specific infrastructure needs:
 
 - **Ingress or Internal Deployment**: If you prefer not to use `Caddy` or want to integrate the deployment with an existing ingress controller (like NGINX, Traefik, etc.), you can disable Caddy and configure your own ingress to expose `lightwalletd` or other services. This makes the chart suitable for use in internal networks or environments where `Caddy` is not needed.
-  
+
 - **Internal Infrastructure**: For deployments that don’t require public exposure (e.g., running on internal networks or for development purposes), you can modify the chart to adjust how services are exposed, allowing tighter integration with internal load balancers or private networking configurations.
 
 - **Custom Images and Resources**: All Docker images, resource limits, volume sizes, and other Kubernetes objects are fully customizable. You can override any value in the `values.yaml` file or through the `--set` flags in Helm, making it easy to adapt the deployment to your exact specifications.
@@ -22,15 +22,15 @@ In summary, this Helm chart provides a turnkey solution to deploy the Zcash ecos
 
 This Helm chart includes several components that work together to create a complete Zcash infrastructure setup. Below is a brief explanation of each component, along with links to their respective GitHub repositories for more information.
 
-### Zcashd
-`zcashd` is the core Zcash full node implementation, responsible for maintaining the Zcash blockchain, validating transactions, and participating in the Zcash network. It allows you to operate a Zcash node, enabling features such as transaction relaying and blockchain synchronization. It is highly configurable, allowing deployment in various environments, including testnet and mainnet modes.
-
-- GitHub: [Zcashd Repository](https://github.com/zcash/zcash)
-
 ### Zebra
-`zebra` is an alternative Zcash full node implementation developed by the Zcash Foundation. It is written in Rust and focuses on security, performance, and modularity. Like `zcashd`, it can operate as a full node, validating blocks and transactions in the Zcash network. Zebra is intended to provide diversity in Zcash node software, making the network more robust and resilient.
+`zebra` is a Zcash full node implementation developed by the Zcash Foundation. It is responsible for maintaining the Zcash blockchain, validating transactions, and participating in the Zcash peer-to-peer network. zebra is written in Rust and focuses on security, performance, and modularity. It was developed to promote diversity in Zcash node software, making the network more robust and resilient. zebra is the preferred full node implementation for new deployments, and is configured by default in this Helm chart.
 
 - GitHub: [Zebra Repository](https://github.com/ZcashFoundation/zebra)
+
+### Zcashd
+`zcashd` is the original Zcash node implementation developed by Electric Coin Company. It is written in C++ and was forked from Bitcoin Core. Like zebra, it operates as a full node, validating blocks and transactions in the Zcash network. zcashd has a longer history of deployment and is currently still the more widely deployed full node implementation, but is in the process of being deprecated in favour of zebra. Alternatives are being developed for functionality currently supported only by zcashd, such as its internal wallet. You should aim to have switched to zebra by early 2025, in advance of the NU7 network upgrade, which zcashd will likely not support (see [ECC's roadmap](https://electriccoin.co/roadmap/)).
+
+- GitHub: [Zcashd Repository](https://github.com/zcash/zcash)
 
 ### Lightwalletd
 `lightwalletd` is a lightweight server that acts as a proxy between Zcash light clients (such as mobile wallets) and full Zcash nodes like `zcashd` or `zebra`. It enables light clients to interact with the Zcash blockchain without requiring a full node locally. Lightwalletd processes client requests, such as syncing balances and sending transactions, by forwarding them to a connected full node.
@@ -89,7 +89,7 @@ The following table lists the configurable parameters of the Zcashd Helm chart a
 
 | Parameter                     | Description                                                  | Default                                   | Required | Possible values                          |
 |--------------------------------|--------------------------------------------------------------|-------------------------------------------|----------|------------------------------------------|
-| `zcashd.enabled`               | Enable Zcashd node deployment                                | `True`                                    | True    | `False`, `True`                          |
+| `zcashd.enabled`               | Enable Zcashd node deployment                                | `False`                                   | True    | `False`, `True`                          |
 | `zcashd.name`                  | Name of the Zcashd instance                                  | `zcashd`                                  | True    | Any string                               |
 | `zcashd.testnet`               | Enable testnet mode                                          | `False`                                   | True    | `true`, `True`                           |
 | `zcashd.image.repository`      | Zcashd Docker image repository                               | `electriccoinco/zcashd`                   | True    | Any valid image repository               |
@@ -113,7 +113,7 @@ The following table lists the configurable parameters of the Zcashd Helm chart a
 | `zebra.volumes.data.storageClass` | Storage class for the Zebra data volume                   | `defaut`                                  | True    | Any valid storage class                  |
 | `zebra.service.type`           | Service type for Zebra                                       | `ClusterIP`                               | True    | `ClusterIP`, `NodePort`, `LoadBalancer`  |
 | `lightwalletd.enabled`         | Enable Lightwalletd deployment                               | `True`                                    | True    | `False`, `True`                          |
-| `lightwalletd.zcashNodeType`   | Type of Zcash node (`zcashd` or `zebra`)                     | `zcashd`                                  | True    | `zcashd`, `zebra`                        |
+| `lightwalletd.zcashNodeType`   | Type of Zcash node (`zcashd` or `zebra`)                     | `zebra`                                   | True    | `zcashd`, `zebra`                        |
 | `lightwalletd.image.repository`| Lightwalletd Docker image repository                         | `electriccoinco/lightwalletd`             | True    | Any valid image repository               |
 | `lightwalletd.image.tag`       | Lightwalletd Docker image tag                                | `latest`                                  | True    | Any valid image tag                      |
 | `lightwalletd.volumes.data.size`| Size of the Lightwalletd data volume                        | `400Gi`                                   | True    | Any valid size (e.g., `40Gi`)            |
