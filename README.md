@@ -143,3 +143,6 @@ You can override the default values by creating a custom `values.yaml` or using 
 helm install <release-name> zcash-stack/zcash-stack
 ```
 
+## Acknowledgments
+
+This project was inspired by the work in [emersonian/zcash-stack](https://github.com/emersonian/zcash-stack). Their implementation provided valuable insights for structuring and organizing this codebase.
