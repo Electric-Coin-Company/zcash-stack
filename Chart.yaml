@@ -3,7 +3,7 @@ name: zcash-stack
 description: A Helm chart to deploy the Zcash ecosystem on Kubernetes.
 type: application
 version: 1.0.0
-appVersion: "1.0.0"
+appVersion: "1.0.1"
 
 icon: https://electriccoin.co/wp-content/uploads/2024/03/logo-ecc.png
 home: https://electriccoin.co
@@ -27,7 +27,7 @@ annotations:
   artifacthub.io/source-url: "https://github.com/Electric-Coin-Company/zcash-stack"
   artifacthub.io/website-url: "https://electriccoin.co"
   artifacthub.io/display-name: "Zcash Stack"
-  artifacthub.io/version: "1.0.0"
+  artifacthub.io/version: "1.0.1"
   artifacthub.io/changes: |
     - Initial release of Zcash-Stack Helm chart
   artifacthub.io/prerelease: "false"

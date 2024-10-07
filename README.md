@@ -11,7 +11,7 @@ By default, this chart uses **Caddy** as a web frontend for `lightwalletd`, maki
 Although the default configuration is ready to deploy and run, this Helm chart is highly customizable. You can easily adapt it to fit your specific infrastructure needs:
 
 - **Ingress or Internal Deployment**: If you prefer not to use `Caddy` or want to integrate the deployment with an existing ingress controller (like NGINX, Traefik, etc.), you can disable Caddy and configure your own ingress to expose `lightwalletd` or other services. This makes the chart suitable for use in internal networks or environments where `Caddy` is not needed.
-  
+
 - **Internal Infrastructure**: For deployments that don’t require public exposure (e.g., running on internal networks or for development purposes), you can modify the chart to adjust how services are exposed, allowing tighter integration with internal load balancers or private networking configurations.
 
 - **Custom Images and Resources**: All Docker images, resource limits, volume sizes, and other Kubernetes objects are fully customizable. You can override any value in the `values.yaml` file or through the `--set` flags in Helm, making it easy to adapt the deployment to your exact specifications.
