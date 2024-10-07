@@ -89,7 +89,7 @@ The following table lists the configurable parameters of the Zcashd Helm chart a
 
 | Parameter                     | Description                                                  | Default                                   | Required | Possible values                          |
 |--------------------------------|--------------------------------------------------------------|-------------------------------------------|----------|------------------------------------------|
-| `zcashd.enabled`               | Enable Zcashd node deployment                                | `True`                                    | True    | `False`, `True`                          |
+| `zcashd.enabled`               | Enable Zcashd node deployment                                | `False`                                   | True    | `False`, `True`                          |
 | `zcashd.name`                  | Name of the Zcashd instance                                  | `zcashd`                                  | True    | Any string                               |
 | `zcashd.testnet`               | Enable testnet mode                                          | `False`                                   | True    | `true`, `True`                           |
 | `zcashd.image.repository`      | Zcashd Docker image repository                               | `electriccoinco/zcashd`                   | True    | Any valid image repository               |
