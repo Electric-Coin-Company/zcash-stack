@@ -1,0 +1,52 @@
+# Helm-specific files
+*.tgz        # Helm chart package files
+.chart.lock  # Helm chart lock file (optional, can be included if locking dependencies)
+.releases    # Helm release tracking files
+
+# Kubernetes-related files
+kubeconfig   # Kubeconfig file (if exists)
+
+# OS-specific files
+.DS_Store    # macOS
+Thumbs.db    # Windows
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp        # vim swap files
+*.swo
+
+# Helm dependencies (if using 'helm dep up')
+charts/      # Helm charts dependency folder (unless you want to track specific subcharts)
+
+# Build and deployment output (if using any CI/CD tools)
+output/
+release/
+dist/
+
+# Sensitive files (you might have templates for sensitive data)
+secret.yaml
+values-*.yaml   # Custom Helm values files (e.g., values-prod.yaml)
+
+# Terraform state (if using alongside Helm)
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Editor and IDE config files
+.idea/        # JetBrains IDE (e.g., IntelliJ, WebStorm)
+.vscode/      # Visual Studio Code
+*.iml         # JetBrains IDE config files
+*.code-workspace
+
+# Python virtual environments (if applicable)
+venv/
+__pycache__/
+
+# Node.js specific (if using node-based automation scripts)
+node_modules/
+
+# Ignore any env files (if applicable)
+.env
+.env.*

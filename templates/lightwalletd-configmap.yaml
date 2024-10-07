@@ -1,0 +1,11 @@
+{{- if .Values.lightwalletd.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.lightwalletd.name }}
+data:
+  zcash.conf: |
+    rpcbind={{ .Release.Name }}-{{ if eq .Values.lightwalletd.zcashNodeType "zcashd" }}{{ .Values.zcashd.name }}{{ else if eq .Values.lightwalletd.zcashNodeType "zebra" }}{{ .Values.zebra.name }}{{ end }}
+    rpcuser={{ .Values.rpc.credentials.rpcUser }}
+    rpcpassword={{ .Values.rpc.credentials.rpcPassword }}
+{{- end }}

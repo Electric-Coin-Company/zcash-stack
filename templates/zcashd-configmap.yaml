@@ -1,0 +1,20 @@
+{{- if .Values.zcashd.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.zcashd.name }}
+data:
+  zcashd.conf: |
+    {{- if .Values.zcashd.lightwalletd }}
+    txindex=1
+    lightwalletd=1
+    experimentalfeatures=1
+    {{- end }}
+    rpcuser={{ .Values.rpc.credentials.rpcUser }}
+    rpcpassword={{ .Values.rpc.credentials.rpcPassword }}
+    rpcbind=0.0.0.0
+    rpcallowip=0.0.0.0/0
+    {{- if .Values.zcashd.testnet }}
+    testnet=1
+    {{- end }}
+{{- end }}

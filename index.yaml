@@ -10,13 +10,13 @@ entries:
       artifacthub.io/license: MIT
       artifacthub.io/prerelease: "false"
       artifacthub.io/source-url: https://github.com/Electric-Coin-Company/zcash-stack
-      artifacthub.io/version: 1.0.0
+      artifacthub.io/version: 1.0.1
       artifacthub.io/website-url: https://electriccoin.co
     apiVersion: v2
-    appVersion: 1.0.0
-    created: "2024-09-27T23:25:04.46368978-06:00"
+    appVersion: 1.0.1
+    created: "2024-10-07T13:50:12.786870951-06:00"
     description: A Helm chart to deploy the Zcash ecosystem on Kubernetes.
-    digest: 2bfc8befa1b9d4c95f4ad27dae06b2dec6e2af42533db06e9a8854f512f79dcb
+    digest: 41a2e7df7eb72175251ad7ae91bf94e31ef6cd6fb95c5f0a6fb4a779beb0aa37
     home: https://electriccoin.co
     icon: https://electriccoin.co/wp-content/uploads/2024/03/logo-ecc.png
     keywords:
@@ -33,6 +33,6 @@ entries:
     - https://github.com/Electric-Coin-Company/zcash-stack
     type: application
     urls:
-    - https://Electric-Coin-Company.github.io/zcash-stack/zcash-stack-1.0.0.tgz
-    version: 1.0.0
-generated: "2024-09-27T23:25:04.462673828-06:00"
+    - https://Electric-Coin-Company.github.io/zcash-stack/zcash-stack-1.0.1.tgz
+    version: 1.0.1
+generated: "2024-10-07T13:50:12.78542856-06:00"

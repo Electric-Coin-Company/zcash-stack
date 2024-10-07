@@ -1,0 +1,17 @@
+{{- if .Values.dnsseeder.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.dnsseeder.name }}
+  labels:
+    app: dnsseed
+spec:
+  type: {{ .Values.dnsseeder.service.type }}
+  ports:
+    - name: dns
+      port: 53
+      targetPort: 53
+      protocol: UDP
+  selector:
+    app: {{ .Release.Name }}-{{ .Values.dnsseeder.name }}
+{{- end }}

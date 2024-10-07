@@ -1,0 +1,50 @@
+{{- if .Values.dnsseeder.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.dnsseeder.name }}
+  labels:
+    app: {{ .Release.Name }}-{{ .Values.dnsseeder.name }}
+spec:
+  replicas: {{ .Values.dnsseeder.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Values.dnsseeder.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-{{ .Values.dnsseeder.name }}
+    spec:
+      containers:
+        - name: dnsseeder
+          image: "{{ .Values.dnsseeder.image.repository }}:{{ .Values.dnsseeder.image.tag }}@sha256:{{ .Values.dnsseeder.image.hash }}"
+          imagePullPolicy: {{ .Values.dnsseeder.image.pullPolicy }}
+          env:
+            - name: SEED_HOSTNAME
+              value: "{{ .Values.dnsseeder.env.seedHostname }}"
+            - name: NODE_HOSTNAME
+              value: "{{ .Values.dnsseeder.env.nodeHostname }}"
+            - name: EMAIL
+              value: "{{ .Values.dnsseeder.env.email }}"
+            - name: THREADS
+              value: "{{ .Values.dnsseeder.env.threads }}"
+            - name: ADDRESS
+              value: "{{ .Values.dnsseeder.env.address }}"
+            - name: PORT
+              value: "53"
+            - name: NETWORK
+              value: "{{ .Values.dnsseeder.env.network }}"
+          ports:
+            - containerPort: 53
+              name: dns
+          resources:
+            requests:
+              cpu: {{ .Values.zebra.requests.cpu }}
+              memory: {{ .Values.zebra.requests.memory }}
+            {{- if .Values.zebra.limits }}
+            limits:
+              {{- if .Values.zebra.limits.memory }}
+              memory: {{ .Values.zebra.limits.memory }}
+              {{- end }}
+            {{- end }}
+{{- end }}
