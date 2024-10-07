@@ -113,7 +113,7 @@ The following table lists the configurable parameters of the Zcashd Helm chart a
 | `zebra.volumes.data.storageClass` | Storage class for the Zebra data volume                   | `defaut`                                  | True    | Any valid storage class                  |
 | `zebra.service.type`           | Service type for Zebra                                       | `ClusterIP`                               | True    | `ClusterIP`, `NodePort`, `LoadBalancer`  |
 | `lightwalletd.enabled`         | Enable Lightwalletd deployment                               | `True`                                    | True    | `False`, `True`                          |
-| `lightwalletd.zcashNodeType`   | Type of Zcash node (`zcashd` or `zebra`)                     | `zcashd`                                  | True    | `zcashd`, `zebra`                        |
+| `lightwalletd.zcashNodeType`   | Type of Zcash node (`zcashd` or `zebra`)                     | `zebra`                                   | True    | `zcashd`, `zebra`                        |
 | `lightwalletd.image.repository`| Lightwalletd Docker image repository                         | `electriccoinco/lightwalletd`             | True    | Any valid image repository               |
 | `lightwalletd.image.tag`       | Lightwalletd Docker image tag                                | `latest`                                  | True    | Any valid image tag                      |
 | `lightwalletd.volumes.data.size`| Size of the Lightwalletd data volume                        | `400Gi`                                   | True    | Any valid size (e.g., `40Gi`)            |

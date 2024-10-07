@@ -54,7 +54,7 @@ rpc:
 
 lightwalletd:
   enabled: true
-  zcashNodeType: zcashd # zebra or zcashd
+  zcashNodeType: zebra # zebra or zcashd
   name: lightwalletd
   image:
     repository: electriccoinco/lightwalletd
