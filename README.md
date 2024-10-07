@@ -22,15 +22,15 @@ In summary, this Helm chart provides a turnkey solution to deploy the Zcash ecos
 
 This Helm chart includes several components that work together to create a complete Zcash infrastructure setup. Below is a brief explanation of each component, along with links to their respective GitHub repositories for more information.
 
-### Zcashd
-`zcashd` is the core Zcash full node implementation, responsible for maintaining the Zcash blockchain, validating transactions, and participating in the Zcash network. It allows you to operate a Zcash node, enabling features such as transaction relaying and blockchain synchronization. It is highly configurable, allowing deployment in various environments, including testnet and mainnet modes.
-
-- GitHub: [Zcashd Repository](https://github.com/zcash/zcash)
-
 ### Zebra
-`zebra` is an alternative Zcash full node implementation developed by the Zcash Foundation. It is written in Rust and focuses on security, performance, and modularity. Like `zcashd`, it can operate as a full node, validating blocks and transactions in the Zcash network. Zebra is intended to provide diversity in Zcash node software, making the network more robust and resilient.
+`zebra` is a Zcash full node implementation developed by the Zcash Foundation. It is responsible for maintaining the Zcash blockchain, validating transactions, and participating in the Zcash peer-to-peer network. zebra is written in Rust and focuses on security, performance, and modularity. It was developed to promote diversity in Zcash node software, making the network more robust and resilient. zebra is the preferred full node implementation for new deployments, and is configured by default in this Helm chart.
 
 - GitHub: [Zebra Repository](https://github.com/ZcashFoundation/zebra)
+
+### Zcashd
+`zcashd` is the original Zcash node implementation developed by Electric Coin Company. It is written in C++ and was forked from Bitcoin Core. Like zebra, it operates as a full node, validating blocks and transactions in the Zcash network. zcashd has a longer history of deployment and is currently still the more widely deployed full node implementation, but is in the process of being deprecated in favour of zebra. Alternatives are being developed for functionality currently supported only by zcashd, such as its internal wallet. You should aim to have switched to zebra by early 2025, in advance of the NU7 network upgrade, which zcashd will likely not support (see [ECC's roadmap](https://electriccoin.co/roadmap/)).
+
+- GitHub: [Zcashd Repository](https://github.com/zcash/zcash)
 
 ### Lightwalletd
 `lightwalletd` is a lightweight server that acts as a proxy between Zcash light clients (such as mobile wallets) and full Zcash nodes like `zcashd` or `zebra`. It enables light clients to interact with the Zcash blockchain without requiring a full node locally. Lightwalletd processes client requests, such as syncing balances and sending transactions, by forwarding them to a connected full node.
