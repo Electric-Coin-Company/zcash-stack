@@ -1,0 +1,30 @@
+{{- if and .Values.zfaucet.enabled .Values.zcashd.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.zfaucet.name }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.zfaucet.name }}
+  namespace: default
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/exec"]
+  verbs: ["get", "list", "create", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.zfaucet.name }}
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Release.Name }}-{{ .Values.zfaucet.name }}
+subjects:
+- kind: ServiceAccount
+  name: {{ .Release.Name }}-{{ .Values.zfaucet.name }}
+  namespace: default
+{{- end }}

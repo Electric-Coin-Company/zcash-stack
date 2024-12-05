@@ -78,7 +78,8 @@ lightwalletd:
 # lightwalletd-front
 caddy: 
   enabled: False
-  domain: "lwd.example.com"
+  domainLightwalletd: "lwd.example.com"
+  domainZfaucet: "zfaucet.example.com"
   email: "admin@example.com"
 
 dnsseeder:
@@ -104,3 +105,20 @@ dnsseeder:
     threads: 384
     address: "0.0.0.0"
     network: "mainnet"
+
+zfaucet:
+  enabled: False
+  name: zfaucet
+  replicas: 1
+  image:
+    repository: electriccoinco/zfaucet
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+  requests: {}
+  # requests:
+  #   cpu: 1
+  #   memory: 1.5Gi
+  #limits:
+  #  memory: 3Gi

@@ -5,8 +5,16 @@ metadata:
   name: {{ .Release.Name }}-caddy
 data:
   Caddyfile: |
-    {{ .Values.caddy.domain }} {
-        reverse_proxy h2c://{{ .Values.lightwalletd.name }}-svc-service:9067
+    {{- if .Values.lightwalletd.enabled }}
+    {{ .Values.caddy.domainLightwalletd }} {
+        reverse_proxy h2c://{{ .Release.Name }}-{{ .Values.lightwalletd.name }}:9067
         tls {{ .Values.caddy.email }}
     }
+    {{- end }}
+    {{- if and .Values.zfaucet.enabled .Values.zcashd.enabled }}
+    {{ .Values.caddy.domainZfaucet }} {
+        reverse_proxy h2c://{{ .Release.Name }}-{{ .Values.zfaucet.name }}:8000
+        tls {{ .Values.caddy.email }}
+    }
+    {{- end }}
 {{- end }}

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: dnsseeder
-          image: "{{ .Values.dnsseeder.image.repository }}:{{ .Values.dnsseeder.image.tag }}@sha256:{{ .Values.dnsseeder.image.hash }}"
+          image: "{{ .Values.dnsseeder.image.repository }}:{{ .Values.dnsseeder.image.tag }}"
           imagePullPolicy: {{ .Values.dnsseeder.image.pullPolicy }}
           env:
             - name: SEED_HOSTNAME

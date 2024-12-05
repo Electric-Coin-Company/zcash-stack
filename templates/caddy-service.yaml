@@ -8,12 +8,12 @@ spec:
     app: {{ .Release.Name }}-caddy
   ports:
     - protocol: TCP
-      port: 80       # Puerto HTTP
+      port: 80
       targetPort: 80
-      name: http     # Nombre del puerto HTTP
+      name: http
     - protocol: TCP
-      port: 443      # Puerto HTTPS
+      port: 443
       targetPort: 443
-      name: https    # Nombre del puerto HTTPS
+      name: https 
   type: LoadBalancer
 {{- end }}
