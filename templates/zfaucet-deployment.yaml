@@ -1,0 +1,41 @@
+{{- if and .Values.zfaucet.enabled .Values.zcashd.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.zfaucet.name }}
+  labels:
+    app: {{ .Release.Name }}-{{ .Values.zfaucet.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Values.zfaucet.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-{{ .Values.zfaucet.name }}
+    spec:
+      containers:
+      - name: zfaucet
+        image: {{ .Values.zfaucet.image.repository }}:{{ .Values.zfaucet.image.tag }}
+        imagePullPolicy: {{ .Values.zfaucet.image.pullPolicy }}
+        env:
+        - name: NODE_ENDPOINT
+          value: "http://{{ .Release.Name }}-{{ .Values.zcashd.name }}:8232"
+        - name: RPCUSER
+          value: {{ .Values.rpc.credentials.rpcUser }}
+        - name: RPCPASSWORD
+          value: {{ .Values.rpc.credentials.rpcPassword }}
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: {{ .Values.zfaucet.requests.cpu }}
+            memory: {{ .Values.zfaucet.requests.memory }}
+          {{- if .Values.zfaucet.limits }}
+          limits:
+            {{- if .Values.zfaucet.limits.memory }}
+            memory: {{ .Values.zfaucet.limits.memory }}
+            {{- end }}
+          {{- end }}
+{{- end }}

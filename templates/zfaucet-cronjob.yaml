@@ -1,0 +1,49 @@
+{{- if and .Values.zfaucet.enabled .Values.zcashd.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.zfaucet.name }}
+  labels:
+    app: zfaucet
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ .Release.Name }}-{{ .Values.zfaucet.name }}
+          containers:
+          - name: kubectl
+            image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+            imagePullPolicy:  {{ .Values.zfaucet.image.pullPolicy }}
+            command:
+            - "/bin/bash"
+            - "-c"
+            - |
+              apt update; apt install bc curl -y
+              # Make the RPC request and handle empty or invalid responses
+              RESPONSE=$(curl --silent --user "$RPCUSER:$RPCPASSWORD" --data-binary '{"jsonrpc": "1.0", "id": "curltest", "method": "getblockchaininfo", "params": []}' -H 'content-type: text/plain;' $NODE_ENDPOINT || echo "")
+
+              # Extract progress if the response is valid, otherwise set PROGRESS to 0
+              PROGRESS=$(echo $RESPONSE | grep -o '"verificationprogress":[0-9\.]*' | awk -F: '{print $2}')
+              PROGRESS=${PROGRESS:-0}
+
+              # Validate that PROGRESS is numeric before comparison
+              if echo "$PROGRESS" | grep -qE '^[0-9]+(\.[0-9]+)?$'; then
+                  if [ "$(echo "$PROGRESS >= 0.999" | bc -l)" -eq 1 ]; then
+                      echo "Zcash indexing is complete (verificationprogress: $PROGRESS)."
+                      break
+                  else
+                      echo "Waiting for Zcash to complete indexing... Current progress: $PROGRESS"
+                      exit 0;
+                  fi
+              else
+                  echo "Invalid response or progress value: $PROGRESS. Retrying..."
+                  exit 0;
+              fi
+
+              POD_NAME=$(kubectl get pods -l app={{ .Release.Name }}-{{ .Values.zfaucet.name }} -o jsonpath="{.items[0].metadata.name}") &&
+              kubectl exec -it $POD_NAME -- python /zfaucet/manage.py healthcheck &&
+              kubectl exec -it $POD_NAME -- python /zfaucet/manage.py sweepfunds;
+          restartPolicy: OnFailure
+{{- end }}
